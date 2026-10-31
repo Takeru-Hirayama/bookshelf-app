@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class UpdateGenreRequest extends FormRequest
+{
+    public function authorize()
+    {
+        return true;
+    }
+
+    public function rules()
+    {
+        return [
+            'name' => ['required', 'string', 'max:255', Rule::unique('genres')->ignore($this->genre)],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'ジャンル名は必須です。',
+            'name.string' => 'ジャンル名は文字列で入力してください。',
+            'name.max' => 'ジャンル名は255文字以内で入力してください。',
+            'name.unique' => 'そのジャンル名は既に使用されています。',
+        ];
+    }
+}
