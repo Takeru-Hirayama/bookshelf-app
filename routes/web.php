@@ -3,11 +3,19 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RankingController;
+use App\Http\Controllers\ReadingPlanController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewLikeController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ReportController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
 // トップページ（書籍一覧）
 Route::get('/', [BookController::class, 'index'])->name('home');
@@ -25,6 +33,7 @@ Route::middleware('auth')->group(function () {
 
     // 書籍管理（createは{book}より先に定義）
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
+    Route::get('/books/isbn/{isbn}', [BookController::class, 'searchByIsbn'])->name('books.searchByIsbn');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
@@ -44,8 +53,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/reviews/{review}/like', [ReviewLikeController::class, 'toggle'])->name('reviews.like');
 
     // マイ読書レポート
-    Route::get("/reports", [ReportController::class, "index"])->name("reports.index");
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+    // 読書計画
+    Route::post('/reading-plans/{reading_plan}/complete', [ReadingPlanController::class, 'complete'])->name('reading-plans.complete');
+    Route::resource('reading-plans', ReadingPlanController::class)->except(['show']);
+
+    // 通知
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 });
 
 // 書籍詳細（認証不要、{book}パラメータを含むため最後に定義）
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
+
+// 認証機能用ルート、RouteServiceProvider.php でミドルウェアを設定しているので必要ない
+// require __DIR__.'/auth.php';
