@@ -31,7 +31,7 @@ class ReadingPlanFactory extends Factory
 
     public function inProgress(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(fn (array $attributes): array => [
             'status' => ReadingPlanStatus::InProgress,
             'completed_at' => null,
         ]);
@@ -39,7 +39,7 @@ class ReadingPlanFactory extends Factory
 
     public function completed(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(fn (array $attributes): array => [
             'status' => ReadingPlanStatus::Completed,
             'completed_at' => now(),
         ]);
@@ -47,7 +47,7 @@ class ReadingPlanFactory extends Factory
 
     public function expired(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(fn (array $attributes): array => [
             'status' => ReadingPlanStatus::Expired,
             'target_date' => now()->subDays(3)->format('Y-m-d'),
             'completed_at' => null,

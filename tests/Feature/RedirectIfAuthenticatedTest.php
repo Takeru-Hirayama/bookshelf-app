@@ -22,7 +22,7 @@ class RedirectIfAuthenticatedTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $middleware->handle($request, fn() => response('next'));
+        $response = $middleware->handle($request, fn () => response('next'));
 
         $this->assertEquals(url(RouteServiceProvider::HOME), $response->headers->get('Location'));
 
@@ -34,7 +34,7 @@ class RedirectIfAuthenticatedTest extends TestCase
         $middleware = new RedirectIfAuthenticated;
         $request = Request::create('/login', 'GET');
 
-        $response = $middleware->handle($request, fn() => response('allowed'));
+        $response = $middleware->handle($request, fn () => response('allowed'));
 
         $this->assertEquals('allowed', $response->getContent());
     }

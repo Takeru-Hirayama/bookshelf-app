@@ -50,7 +50,7 @@ class ReportController extends Controller
         $grouped = $reviews->groupBy('rating');
 
         return collect(range(1, 5))
-            ->map(fn($rating) => $grouped->has($rating) ? $grouped[$rating]->count() : 0);
+            ->map(fn ($rating) => $grouped->has($rating) ? $grouped[$rating]->count() : 0);
     }
 
     /**
@@ -61,10 +61,10 @@ class ReportController extends Controller
     private function calculateTopRatedBooks(Collection $reviews): Collection
     {
         return $reviews
-            ->filter(fn($review) => $review->rating >= 4)
+            ->filter(fn ($review) => $review->rating >= 4)
             ->sortByDesc('rating')
             ->take(5)
-            ->map(fn($review) => [
+            ->map(fn ($review) => [
                 'id' => $review->book->id,
                 'title' => $review->book->title,
                 'author' => $review->book->author,
@@ -84,14 +84,14 @@ class ReportController extends Controller
     {
         return $reviews
             // flatMap: 1レビュー → 複数ジャンルに展開（多対多の扱い）
-            ->flatMap(fn($review) => $review->book->genres->map(fn($genre) => [
+            ->flatMap(fn ($review) => $review->book->genres->map(fn ($genre) => [
                 'genre_id' => $genre->id,
                 'genre_name' => $genre->name,
                 'rating' => $review->rating,
             ]))
             // groupBy + map: ジャンルごとに集計
             ->groupBy('genre_id')
-            ->map(fn($items) => [
+            ->map(fn ($items) => [
                 'id' => $items->first()['genre_id'],
                 'name' => $items->first()['genre_name'],
                 'count' => $items->count(),
