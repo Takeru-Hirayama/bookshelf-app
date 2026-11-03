@@ -7,12 +7,12 @@ use Illuminate\Validation\Rule;
 
 class UpdateBookRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'user_id' => ['required', 'integer', 'exists:users,id'],
@@ -27,7 +27,7 @@ class UpdateBookRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'user_id.required' => 'ユーザーIDは必須です。',

@@ -17,19 +17,19 @@ class GenreController extends Controller
         return view('genres.index', compact('genres'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('genres.create');
     }
 
-    public function store(StoreGenreRequest $request)
+    public function store(StoreGenreRequest $request): RedirectResponse
     {
         Genre::create($request->validated());
 
         return redirect()->route('genres.index')->with('success', 'ジャンルを作成しました。');
     }
 
-    public function show(Genre $genre)
+    public function show(Genre $genre): View
     {
         $books = $genre->books()->with('genres')->paginate(10);
 
@@ -41,14 +41,14 @@ class GenreController extends Controller
         return view('genres.edit', compact('genre'));
     }
 
-    public function update(UpdateGenreRequest $request, Genre $genre)
+    public function update(UpdateGenreRequest $request, Genre $genre): RedirectResponse
     {
         $genre->update($request->validated());
 
         return redirect()->route('genres.index')->with('success', 'ジャンルを更新しました。');
     }
 
-    public function destroy(Genre $genre)
+    public function destroy(Genre $genre): RedirectResponse
     {
         if ($genre->books()->count() > 0) {
             return redirect()->route('genres.index')->with('error', 'このジャンルには書籍が紐付いているため削除できません。');

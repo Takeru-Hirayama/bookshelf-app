@@ -15,7 +15,7 @@ use Illuminate\Http\Response;
 
 class BookController extends Controller
 {
-    public function index(IndexBookRequest $request)
+    public function index(IndexBookRequest $request): AnonymousResourceCollection
     {
         $query = Book::with('genres')
             ->withCount('reviews')
@@ -42,7 +42,7 @@ class BookController extends Controller
         return BookResource::collection($books);
     }
 
-    public function show(Book $book)
+    public function show(Book $book): BookResource
     {
         $book->load(['genres', 'reviews.user']);
         $book->loadCount('reviews');
@@ -51,7 +51,7 @@ class BookController extends Controller
         return new BookResource($book);
     }
 
-    public function store(StoreBookRequest $request)
+    public function store(StoreBookRequest $request): JsonResponse
     {
         $validated = $request->validated();
         $genreIds = $validated['genres'];
@@ -70,7 +70,7 @@ class BookController extends Controller
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function update(UpdateBookRequest $request, Book $book)
+    public function update(UpdateBookRequest $request, Book $book): BookResource
     {
         $validated = $request->validated();
         $genreIds = $validated['genres'];
@@ -86,7 +86,7 @@ class BookController extends Controller
         return new BookResource($book);
     }
 
-    public function destroy(Book $book)
+    public function destroy(Book $book): JsonResponse
     {
         $book->delete();
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ReviewLikeController extends Controller
 {
-    public function toggle(Review $review)
+    public function toggle(Review $review): RedirectResponse
     {
         Auth::user()->likedReviews()->toggle($review->id);
 

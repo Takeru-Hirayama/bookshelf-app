@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
@@ -19,7 +19,7 @@ class FavoriteController extends Controller
         return view('favorites.index', compact('books'));
     }
 
-    public function toggle(Book $book, Request $request)
+    public function toggle(Book $book, Request $request): RedirectResponse
     {
         $request->user()->favoriteBooks()->toggle($book->id);
 

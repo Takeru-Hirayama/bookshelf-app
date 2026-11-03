@@ -6,12 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class IndexBookRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'keyword' => ['nullable', 'string', 'max:255'],
@@ -21,7 +21,7 @@ class IndexBookRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'keyword.max' => 'キーワードは255文字以内で入力してください。',
