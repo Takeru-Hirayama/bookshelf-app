@@ -7,6 +7,7 @@ use App\Http\Controllers\RankingController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewLikeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReportController;
 
 // トップページ（書籍一覧）
 Route::get('/', [BookController::class, 'index'])->name('home');
@@ -41,6 +42,9 @@ Route::middleware('auth')->group(function () {
 
     // いいね
     Route::post('/reviews/{review}/like', [ReviewLikeController::class, 'toggle'])->name('reviews.like');
+
+    // マイ読書レポート
+    Route::get("/reports", [ReportController::class, "index"])->name("reports.index");
 });
 
 // 書籍詳細（認証不要、{book}パラメータを含むため最後に定義）
