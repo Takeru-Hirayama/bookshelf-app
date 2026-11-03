@@ -6,19 +6,22 @@ use App\Models\Book;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
 {
     public function index()
     {
-        $books = Auth::user()->favoriteBooks()->paginate(10);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $books = $user->favoriteBooks()->paginate(10);
 
         return view('favorites.index', compact('books'));
     }
 
-    public function toggle(Book $book)
+    public function toggle(Book $book, Request $request)
     {
-        Auth::user()->favoriteBooks()->toggle($book->id);
+        $request->user()->favoriteBooks()->toggle($book->id);
 
         return back();
     }
